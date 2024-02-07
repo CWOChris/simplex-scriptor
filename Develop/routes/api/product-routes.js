@@ -33,7 +33,6 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-  // be sure to include its associated Category and Tag data
 });
 
 // create new product
@@ -46,6 +45,28 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
+  try {
+    const newProduct = await Product.create({
+      product_name: req.body.product_name,
+      price: req.body.price,
+      stock: req.body.stock,
+      category_id: req.body.category_id,
+    });
+    if (req.body.tagIds.length && req.body.tagIds.length > 0) {
+      const productTagIdArr = req.body.tagIds.map((tag_id) => {
+        return {
+          product_id: newProduct.id,
+          tag_id,
+        };
+      });
+      await ProductTag.bulkCreate(productTagIdArr);
+    }
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -65,11 +86,10 @@ router.post('/', (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(400).json(err);
-    });
 });
 
 // update product
-router.put('/:id', (req, res) => {
+router.put('/:id',  async (req, res) => {
   // update product data
   Product.update(req.body, {
     where: {
