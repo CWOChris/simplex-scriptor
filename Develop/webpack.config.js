@@ -5,7 +5,7 @@ const { GenerateSW } = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './models/index.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -15,7 +15,12 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: {
+            loader: 'babel-loader',
+            options: {
+                presets: ['@babel/preset-env']
+            },
+        },
       },
       {
         test: /\.css$/,
@@ -35,13 +40,6 @@ module.exports = {
       description: 'Description of my PWA',
       background_color: '#ffffff',
       theme_color: '#ffffff',
-      icons: [
-        {
-          src: path.resolve('src/assets/icon.png'),
-          sizes: [96, 128, 192, 256, 384, 512],
-          destination: path.join('assets', 'icons'),
-        },
-      ],
     }),
   ],
 };
