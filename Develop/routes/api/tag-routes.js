@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
   }  
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   try {
     const tag = await Tag.findByPk(req.params.id, {
