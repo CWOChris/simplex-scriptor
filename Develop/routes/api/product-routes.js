@@ -88,7 +88,7 @@ router.post('/', (req, res) => {
       res.status(400).json(err);
 });
 
-// update product
+// // update product begin - will need to revisit this code
 router.put('/:id',  async (req, res) => {
   // update product data
   Product.update(req.body, {
@@ -132,6 +132,7 @@ router.put('/:id',  async (req, res) => {
       res.status(400).json(err);
     });
 });
+// // update product end - will need to revisit
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
